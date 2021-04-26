@@ -22,6 +22,7 @@ const router = require('./router.js');
 global.storageCreator = storageCreator;
 let indexFile = process.argv[2] === 'dev' ? 'dev.html' : 'index.html';
 
+const logger = require('koa-pino-logger2')
 const app = websockify(new Koa());
 app.proxy = true;
 yapi.app = app;
@@ -31,6 +32,8 @@ app.use(koaBody({ multipart: true, jsonLimit: '2mb', formLimit: '1mb', textLimit
 app.use(mockServer);
 app.use(router.routes());
 app.use(router.allowedMethods());
+//log 组件
+app.use(logger())
 
 websocket(app);
 
